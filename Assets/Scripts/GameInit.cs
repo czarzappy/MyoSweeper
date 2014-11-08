@@ -19,8 +19,31 @@ public class GameInit : MonoBehaviour {
         {
             for (int j = 0; j < height; j++)
             {
-                GameObject mine = Instantiate(Resources.Load("Mine")) as GameObject;
-                mine.name = "Mine_" + i + "_" + j;
+                GameObject mine;
+                //string s = mine.name + "/Offset/Hidden";
+                int value = Random.Range(0, 4);
+                //Debug.Log(value);
+                switch (value)
+                {
+                    case 0:
+                        mine = Instantiate(Resources.Load("MineCell")) as GameObject;
+                        mine.name = "MineCell_";
+                        break;
+                    case 1:
+                        mine = Instantiate(Resources.Load("NumberCell")) as GameObject;
+                        mine.name = "NumberCell_";
+                        break;
+                    case 2:
+                        mine = Instantiate(Resources.Load("EmptyCell")) as GameObject;
+                        mine.name = "EmptyCell_";
+                        break;
+                    default:
+                        mine = Instantiate(Resources.Load("EmptyCell")) as GameObject;
+                        mine.name = "EmptyCell_";
+                        break;
+                }
+
+                mine.name += i + "_" + j;
                 mine.transform.position = new Vector2(i * mineDim, j * mineDim);
                 mine.transform.parent = this.transform;
             }
