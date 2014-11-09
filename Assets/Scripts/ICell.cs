@@ -5,5 +5,5 @@ using System.Text;
 
 public interface ICell
 {
-    void OnSelected();
+    void Unselect();
 }

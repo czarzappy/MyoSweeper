@@ -99,64 +99,49 @@ public class GameInit : MonoBehaviour {
             for (int j = 0; j < height; j++)
             {
                 int surroundingMines = 0;
-                Vector2[] surrounding = new Vector2[8];
+                GameObject cell = null;
                 bool exitLoop = false;
                 for (int k = 0; k < mines.Length && !exitLoop; k++)
                 {
-                    
                     Vector2 currentMine = mines[k];
                     int dx = (int)Mathf.Abs(i - currentMine.x);
                     int dy = (int)Mathf.Abs(j - currentMine.y);
                     if (dx == 0 && dy == 0)
                     {
-                        GameObject mine = Instantiate(Resources.Load("MineCellS")) as GameObject;
-                        mine.name = "MineCellS_" + i + "_" + j;
-                        mine.transform.position = new Vector2(i * mineDim, j * mineDim);
-                        mine.transform.parent = ms.transform;
+                        cell = Instantiate(Resources.Load("MineCell")) as GameObject;
+                        cell.name = "MineCell_";
+                        cell.transform.parent = ms.transform;
+                        cell.AddComponent<MineCell>();
+
                         exitLoop = true;
-                        //k = mines.Length;
                     }
                     else if (dx <= 1 && dy <= 1)
-                    {
-                        if (surroundingMines == 5)
-                        {
-                            Debug.Log(surroundingMines);
-                            Debug.Log("x1: " + i + ", x2: " + currentMine.x + ", dx: " + dx);
-                            Debug.Log("y1: " + j + ", y2: " + currentMine.y + ", dy: " + dy);
-                        }
-                        surrounding[surroundingMines] = currentMine;
                         surroundingMines++;
-                    }
                 }
 
                 if (!exitLoop)
                 {
                     if (surroundingMines == 0)
                     {
-                        GameObject mine = Instantiate(Resources.Load("EmptyCellS")) as GameObject;
-                        mine.name = "cell_" + i + "_" + j;
-                        mine.transform.position = new Vector2(i * mineDim, j * mineDim);
-                        mine.transform.parent = blanks.transform;
+                        cell = Instantiate(Resources.Load("EmptyCell")) as GameObject;
+                        cell.name = "Cell_";
+                        cell.transform.parent = blanks.transform;
+                        cell.AddComponent<EmptyCell>();
                     }
                     else
                     {
+                        cell = Instantiate(Resources.Load("NumberCellS" + surroundingMines)) as GameObject;
+                        cell.name = "Cell_";
                         
-                        GameObject mine = Instantiate(Resources.Load("NumberCellS" + surroundingMines)) as GameObject;
-                        mine.name = "NumberCellS" + surroundingMines + "_" + i + "_" + j;
-                        mine.transform.position = new Vector2(i * mineDim, j * mineDim);
-                        mine.AddComponent<NumberCell>();
-                        mine.GetComponent<NumberCell>().surroundingMines = surroundingMines;
-                        mine.GetComponent<NumberCell>().surrounding = surrounding;
-                        if (surroundingMines == 2)
-                        {
-                            mine.transform.parent = num2Cells.transform;
-                        }
-                        else
-                        {
-                            mine.transform.parent = numCells.transform;
-                        }
+                        cell.AddComponent<NumberCell>();
+                        cell.GetComponent<NumberCell>().surroundingMines = surroundingMines;
+                        cell.transform.parent = numCells.transform;
                     }
                 }
+
+                cell.name += i + "_" + j;
+                cell.GetComponent<Cell>().pos = new Vector2(i, j);
+                cell.transform.position = new Vector2(i * mineDim, j * mineDim);
             }
         }
     }

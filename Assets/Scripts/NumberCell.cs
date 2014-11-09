@@ -14,7 +14,8 @@ public class NumberCell : Cell {
 	
 	}
 
-    public void OnSelected()
+    override public void OnSelected()
     {
+        this.Unselect();
     }
 }

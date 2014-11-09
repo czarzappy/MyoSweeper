@@ -13,7 +13,13 @@ public class MineCell : Cell {
 	
 	}
 
-    public void onSelected()
+    override public void OnSelected()
     {
+        Debug.Log("MineCell - OnSelected");
+        GameObject mines = GameObject.Find("Mines");
+        foreach (Transform child in this.transform.parent.transform)
+        {
+            child.GetComponent<MineCell>().Unselect();
+        }
     }
 }
