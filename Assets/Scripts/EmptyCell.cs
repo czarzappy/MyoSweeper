@@ -25,7 +25,7 @@ public class EmptyCell : Cell {
         Debug.Log("EmptyCell - Deselect: Cell - " + c.name);
         c.Unselect();
         deselected.Add(c);
-        GameInit game = GameObject.Find("GameView").GetComponent<GameInit>();
+        GameHub game = GameObject.Find("GameView").GetComponent<GameHub>();
         game.cellsLeft--;
 
         if (c is NumberCell)
@@ -93,7 +93,7 @@ public class EmptyCell : Cell {
 
     private bool InBounds(int x, int y)
     {
-        GameInit game = GameObject.Find("GameView").GetComponent<GameInit>();
+        GameHub game = GameObject.Find("GameView").GetComponent<GameHub>();
         return !(x >= game.width || x < 0 || y >= game.height || y < 0);
     }
 }
