@@ -16,24 +16,26 @@ public class EmptyCell : Cell {
     override public void OnSelected()
     {
         Debug.Log("EmptyCell - OnSelected");
+
         Deselect(this, new ArrayList());
     }
 
     private ArrayList Deselect(Cell c, ArrayList deselected)
     {
         Debug.Log("EmptyCell - Deselect: Cell - " + c.name);
+        c.Unselect();
+        deselected.Add(c);
+        GameInit game = GameObject.Find("GameView").GetComponent<GameInit>();
+        game.cellsLeft--;
+
         if (c is NumberCell)
         {
             Debug.Log("Deselecting NumberCell");
-            c.Unselect();
-            deselected.Add(c);
             //Escape case
         }
-        else if (c is EmptyCell)
+        else
         {
             Debug.Log("Deselecting EmptyCell");
-            c.Unselect();
-            deselected.Add(c);
 
             Cell top = GetCellByDisplacement(c, 0, 1);
             if (top != null && !top.isDeselected)

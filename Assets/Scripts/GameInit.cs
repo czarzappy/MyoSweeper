@@ -8,6 +8,8 @@ public class GameInit : MonoBehaviour {
     public float mineDim = 2.56f;
     private static float CAMERA_V_SCALE = 41f / 32f;
     private static float CAMERA_H_SCALE = 24f / 32f;
+
+    public int cellsLeft;
 	// Use this for initialization
 	void Start () {
         GameObject camera = GameObject.Find("Camera");
@@ -34,40 +36,6 @@ public class GameInit : MonoBehaviour {
         Vector2[] distinct = points.Distinct().ToArray<Vector2>();
 
         GenerateUsingMines(distinct);
-
-        //for (int i = 0; i < width; i++)
-        //{
-        //    for (int j = 0; j < height; j++)
-        //    {
-        //        GameObject mine;
-        //        //string s = mine.name + "/Offset/Hidden";
-        //        int value = Random.Range(0, 4);
-        //        //Debug.Log(value);
-        //        switch (value)
-        //        {
-        //            case 0:
-        //                mine = Instantiate(Resources.Load("MineCellS")) as GameObject;
-        //                mine.name = "MineCell_";
-        //                break;
-        //            case 1:
-        //                mine = Instantiate(Resources.Load("Number1CellS")) as GameObject;
-        //                mine.name = "NumberCell_";
-        //                break;
-        //            case 2:
-        //                mine = Instantiate(Resources.Load("EmptyCellS")) as GameObject;
-        //                mine.name = "EmptyCell_";
-        //                break;
-        //            default:
-        //                mine = Instantiate(Resources.Load("EmptyCellS")) as GameObject;
-        //                mine.name = "EmptyCell_";
-        //                break;
-        //        }
-
-        //        mine.name += i + "_" + j;
-        //        mine.transform.position = new Vector2(i * mineDim, j * mineDim);
-        //        mine.transform.parent = this.transform;
-        //    }
-        //}
 	}
 
     //Takes in an array of position data for mine locations
@@ -137,6 +105,8 @@ public class GameInit : MonoBehaviour {
                         cell.GetComponent<NumberCell>().surroundingMines = surroundingMines;
                         cell.transform.parent = numCells.transform;
                     }
+
+                    cellsLeft++;
                 }
 
                 cell.name += i + "_" + j;
@@ -148,6 +118,9 @@ public class GameInit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+        if (Input.GetKeyDown("r"))
+        {
+
+        }
 	}
 }
