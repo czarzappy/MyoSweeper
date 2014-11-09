@@ -16,9 +16,6 @@ public class MineCell : Cell {
     override public void OnSelected()
     {
         Debug.Log("MineCell - OnSelected");
-        GameObject explosion = Instantiate(Resources.Load("Fireworks")) as GameObject;
-        explosion.transform.parent = this.transform;
-        explosion.transform.position = this.transform.position;
         GameObject mines = GameObject.Find("Mines");
         foreach (Transform child in this.transform.parent.transform)
         {

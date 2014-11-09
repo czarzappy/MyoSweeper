@@ -10,13 +10,7 @@ public class GameHub : MonoBehaviour {
     private static float CAMERA_V_SCALE = 41f / 32f;
     private static float CAMERA_H_SCALE = 24f / 32f;
 
-<<<<<<< HEAD
     public enum GameState { gettingMines, gameOver, gameWon, inProgress, unknown, startGame };
-=======
-    public enum GameState { gettingMines, gameOver, gameWon, inProgress, unknown };
-
-    public GameState currentState = GameState.unknown;
->>>>>>> origin/Zack
 
     public GameState currentState = GameState.unknown;
 
@@ -39,18 +33,7 @@ public class GameHub : MonoBehaviour {
 
     private void startGame()
     {
-<<<<<<< HEAD
         mines = mines.Distinct().ToArray<Vector2>();
-=======
-        int numPoints = 99;
-        cellsLeft = 0;
-        Vector2[] points = new Vector2[numPoints];
-        for (int i = 0; i < numPoints; i++)
-        {
-            points[i] = new Vector2(Random.Range(0, width), Random.Range(0, height));
-        }
-        Vector2[] distinct = points.Distinct().ToArray<Vector2>();
->>>>>>> origin/Zack
 
         GenerateUsingMines();
     }
@@ -124,11 +107,9 @@ public class GameHub : MonoBehaviour {
             }
         }
 
-<<<<<<< HEAD
         minesIndex = 0;
         mines = new Vector2[MAX_BOMBS];
-=======
->>>>>>> origin/Zack
+
         currentState = GameState.inProgress;
     }
 	
@@ -168,16 +149,11 @@ public class GameHub : MonoBehaviour {
         }
         else if (currentState == GameState.startGame)
         {
-<<<<<<< HEAD
             currentState = GameState.inProgress;
-=======
-            Debug.Log("Restarting Game");
-            currentState = GameState.gameOver;
 
             var children = new List<GameObject>();
             foreach (Transform child in transform) children.Add(child.gameObject);
             children.ForEach(child => Destroy(child));
->>>>>>> origin/Zack
 
             startGame();
         }
