@@ -9,7 +9,7 @@ k = Keypresser()
 username = "jlchamaa"
 key = "oauth:w7kjeztre4ypvzt2dx40r2a8x8aqcl"
 t.twitch_connect(username, key);
- 
+
 #The main loop
 while True:
     #Check for new mesasages
@@ -19,6 +19,7 @@ while True:
         #No new messages...
         continue
     else:
+
         for message in new_messages:
             # we got a message. Let's extract some details from it
             msg = message['message'].lower()
@@ -29,10 +30,16 @@ while True:
             #The code below will simulate the key q if "q" is typed into twitch by someone
             #.. the same thing with "w"
             #Change this to make Twitch fit to your game!
-            if msg=="0": k.key_press("0");
-            if msg=="1": k.key_press("1");
-            if msg=="r": k.key_press("r");
-            
-            
+            finalstr=[]
+            for charr in msg:
+                if charr =='1':
+                    finalstr+='1'
+                if charr=='0':
+                    finalstr+='0'
+                if charr=='r':
+                    finalstr+='r'
+            for charr in finalstr:
+                k.key_press(charr)
+    
             
             
