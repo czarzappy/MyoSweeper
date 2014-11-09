@@ -29,7 +29,9 @@ while True:
             #The code below will simulate the key q if "q" is typed into twitch by someone
             #.. the same thing with "w"
             #Change this to make Twitch fit to your game!
-            if msg=="a": k.key_press("a");
+            if msg=="0": k.key_press("0");
+            if msg=="1": k.key_press("1");
+            if msg=="r": k.key_press("r");
             
             
             
