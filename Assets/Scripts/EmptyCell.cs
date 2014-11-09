@@ -26,6 +26,7 @@ public class EmptyCell : Cell {
         c.Unselect();
         deselected.Add(c);
         GameHub game = GameObject.Find("GameView").GetComponent<GameHub>();
+        Debug.Log("Left: " + game.cellsLeft);
         game.cellsLeft--;
 
         if (c is NumberCell)

@@ -10,7 +10,9 @@ public class GameHub : MonoBehaviour {
     private static float CAMERA_V_SCALE = 41f / 32f;
     private static float CAMERA_H_SCALE = 24f / 32f;
 
-    private enum GameState { };
+    public enum GameState { gettingMines, gameOver, gameWon, inProgress, unknown };
+
+    public GameState currentState = GameState.unknown;
 
     public int cellsLeft;
 	// Use this for initialization
@@ -27,6 +29,7 @@ public class GameHub : MonoBehaviour {
     private void startGame()
     {
         int numPoints = 99;
+        cellsLeft = 0;
         Vector2[] points = new Vector2[numPoints];
         for (int i = 0; i < numPoints; i++)
         {
@@ -113,12 +116,17 @@ public class GameHub : MonoBehaviour {
                 cell.transform.position = new Vector2(i * mineDim, j * mineDim);
             }
         }
+
+        currentState = GameState.inProgress;
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (Input.GetKeyDown("r"))
         {
+            Debug.Log("Restarting Game");
+            currentState = GameState.gameOver;
+
             var children = new List<GameObject>();
             foreach (Transform child in transform) children.Add(child.gameObject);
             children.ForEach(child => Destroy(child));
