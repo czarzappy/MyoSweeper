@@ -7,8 +7,6 @@ public class GameHub : MonoBehaviour {
     public int width;
     public int height;
     public float mineDim = 2.56f;
-    private static float CAMERA_V_SCALE = 41f / 32f;
-    private static float CAMERA_H_SCALE = 24f / 32f;
 
     public enum GameState { gettingMines, gameOver, gameWon, inProgress, unknown, startGame };
 
@@ -26,7 +24,7 @@ public class GameHub : MonoBehaviour {
         camera.name = "Camera";
         Vector3 pos = camera.transform.position;
         camera.transform.position = new Vector3(width * mineDim / 2, height * mineDim / 2, pos.z);
-        camera.GetComponent<Camera>().orthographicSize = (width < height) ? (height * CAMERA_V_SCALE) : (width * CAMERA_H_SCALE);
+        camera.GetComponent<Camera>().orthographicSize = (width < height) ? (30) : (30);
 
         currentState = GameState.gettingMines;
 	}
