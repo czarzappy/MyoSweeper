@@ -10,9 +10,16 @@ public class GameHub : MonoBehaviour {
     private static float CAMERA_V_SCALE = 41f / 32f;
     private static float CAMERA_H_SCALE = 24f / 32f;
 
-    private enum GameState { };
+    public enum GameState { gettingMines, gameOver, gameWon, inProgress, unknown, startGame };
 
-    public int cellsLeft;
+    public GameState currentState = GameState.unknown;
+
+    public int cellsLeft = 0;
+    public string locationData = "";
+
+    public static int MAX_BOMBS = 90;
+    public Vector2[] mines = new Vector2[MAX_BOMBS];
+    public int minesIndex = 0;
 	// Use this for initialization
 	void Start () {
         GameObject camera = GameObject.Find("Camera");
@@ -21,25 +28,19 @@ public class GameHub : MonoBehaviour {
         camera.transform.position = new Vector3(width * mineDim / 2, height * mineDim / 2, pos.z);
         camera.GetComponent<Camera>().orthographicSize = (width < height) ? (height * CAMERA_V_SCALE) : (width * CAMERA_H_SCALE);
 
-        startGame();
+        currentState = GameState.gettingMines;
 	}
 
     private void startGame()
     {
-        int numPoints = 99;
-        Vector2[] points = new Vector2[numPoints];
-        for (int i = 0; i < numPoints; i++)
-        {
-            points[i] = new Vector2(Random.Range(0, width), Random.Range(0, height));
-        }
-        Vector2[] distinct = points.Distinct().ToArray<Vector2>();
+        mines = mines.Distinct().ToArray<Vector2>();
 
-        GenerateUsingMines(distinct);
+        GenerateUsingMines();
     }
 
     //Takes in an array of position data for mine locations
     //Generates number cells around the mines and the blank cell not next to mines. O(n*m), every cell checks every mine
-    private void GenerateUsingMines(Vector2[] mines)
+    private void GenerateUsingMines()
     {
         GameObject ms = new GameObject();
         ms.name = "Mines";
@@ -52,14 +53,6 @@ public class GameHub : MonoBehaviour {
         GameObject numCells = new GameObject();
         numCells.name = "NumCells";
         numCells.transform.parent = this.transform;
-
-        GameObject num1Cells = new GameObject();
-        num1Cells.name = "Num1Cells";
-        num1Cells.transform.parent = this.transform;
-
-        GameObject num2Cells = new GameObject();
-        num2Cells.name = "Num2Cells";
-        num2Cells.transform.parent = this.transform;
 
         for (int i = 0; i < width; i++)
         {
@@ -113,21 +106,99 @@ public class GameHub : MonoBehaviour {
                 cell.transform.position = new Vector2(i * mineDim, j * mineDim);
             }
         }
+
+        minesIndex = 0;
+        mines = new Vector2[MAX_BOMBS];
+        currentState = GameState.inProgress;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown("r"))
+        if (currentState == GameState.inProgress)
         {
-            var children = new List<GameObject>();
-            foreach (Transform child in transform) children.Add(child.gameObject);
-            children.ForEach(child => Destroy(child));
+            if (Input.GetKeyDown("q"))
+            {
+                Debug.Log("Restarting Game");
+                currentState = GameState.gameOver;
+
+                var children = new List<GameObject>();
+                foreach (Transform child in transform) children.Add(child.gameObject);
+                children.ForEach(child => Destroy(child));
+
+                currentState = GameState.gettingMines;
+            }
+        }
+        if (currentState == GameState.gettingMines)
+        {
+            if (Input.GetKeyDown("r"))
+            {
+                BuildMineFromRandom();
+                
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0))
+            {
+                Debug.Log("Zero Entered");
+                BuildMineFromTwitch(true);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+            {
+                Debug.Log("One Entered");
+                BuildMineFromTwitch(false);
+            }
+        }
+        else if (currentState == GameState.startGame)
+        {
+            currentState = GameState.inProgress;
 
             startGame();
         }
 	}
 
-    void OnGUI()
+    //May produces less than the max number of mines, if there are repeats
+    private void BuildMineFromRandom()
     {
+        AddMineToMines(new Vector2(Random.Range(0, width), Random.Range(0, height)));
+    }
+
+    public void BuildMineFromTwitch(bool zero)
+    {
+        locationData += ((zero) ? ("0") : ("1"));
+        if (locationData.Length == 9)
+        {
+            AddMineToMines(BinaryToVector2d(locationData));
+            locationData = "";
+        }
+    }
+
+    public void AddMineToMines(Vector2 mine)
+    {
+        mines[minesIndex] = mine;
+        minesIndex++;
+        if (minesIndex == MAX_BOMBS)
+        {
+            currentState = GameState.startGame;//!!!
+        }
+    }
+
+    public Vector2 BinaryToVector2d(string b)
+    {
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < locationData.Length; i++)
+        {
+            // we start with the least significant digit, and work our way to the left
+            if (locationData[locationData.Length - i - 1] == '0') continue;
+            if (i < 5)
+            {
+                x += (int)Mathf.Pow(2, i);
+            }
+            else
+            {
+                y += (int)Mathf.Pow(2, (i - 5));
+            }
+            
+        }
+        Debug.Log("X: " + x + ", Y: " + y);
+        return new Vector2(x, y);
     }
 }
