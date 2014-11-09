@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class NumberCell : Cell {
-
+    public int surroundingMines;
+    public Vector2[] surrounding;
 	// Use this for initialization
 	void Start () {
 	
