@@ -1,4 +1,5 @@
 #Define the imports
+from time import sleep
 from keypresser import Keypresser
 from twitch import Twitch
 t = Twitch()
@@ -22,7 +23,7 @@ while True:
 
         for message in new_messages:
             # we got a message. Let's extract some details from it
-            msg = message['message'].lower()
+            msg = message['message']
             username = message['username'].lower()
             print(username + ": " + msg);
  
@@ -30,16 +31,9 @@ while True:
             #The code below will simulate the key q if "q" is typed into twitch by someone
             #.. the same thing with "w"
             #Change this to make Twitch fit to your game!
-            finalstr=[]
-            for charr in msg:
-                if charr =='1':
-                    finalstr+='1'
-                if charr=='0':
-                    finalstr+='0'
-                if charr=='r':
-                    finalstr+='r'
-            for charr in finalstr:
-                k.key_press(charr)
+            for letter in msg:
+                k.key_press(letter)
+                sleep(.01)
     
             
             
